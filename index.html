@@ -77,9 +77,39 @@
     <div id="result"></div>
   </section>
 </main>
+<script>
+
+  function convert() {
+  const amount = document.getElementById("amount").value;
+  const from = document.getElementById("from").value;
+  const to = document.getElementById("to").value;
+  const resultBox = document.getElementById("result");
+
+  if (!amount || amount <= 0) {
+    resultBox.textContent = "Please enter a valid amount.";
+    return;
+  }
+
+  // Temporary fixed rates (we'll make them live next)
+  const rates = {
+    USD: { GBP: 0.79, EUR: 0.92 },
+    GBP: { USD: 1.27, EUR: 1.17 },
+    EUR: { USD: 1.09, GBP: 0.85 }
+  };
+
+  if (from === to) {
+    resultBox.textContent = `${amount} ${from} = ${amount} ${to}`;
+    return;
+  }
+
+  const converted = amount * rates[from][to];
+  resultBox.textContent = `${amount} ${from} = ${converted.toFixed(2)} ${to}`;
+}
+</script>
 
 </body>
 
 </html>
+
 
 
