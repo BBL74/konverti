@@ -47,9 +47,8 @@
 </head>
 
  <body>
-
 <header>
-  <img src="konverti-logo.png" alt="Konverti logo">
+  <img src="logo.png" alt="Konverti-logo" class="logo">
   <h1>Konverti</h1>
   <p>Fast, simple currency and unit conversions.</p>
 </header>
@@ -58,28 +57,29 @@
   <section class="converter">
     <h2>Currency Converter</h2>
 
-    <input type="number" id="amount" placeholder="Amount">
+    <input type="number" id="amount" placeholder="Enter amount">
 
     <select id="from">
       <option value="USD">USD</option>
-      <option value="CAD">CAD</option>
       <option value="GBP">GBP</option>
       <option value="EUR">EUR</option>
     </select>
 
     <select id="to">
-      <option value="CAD">CAD</option>
-      <option value="USD">USD</option>
       <option value="GBP">GBP</option>
+      <option value="USD">USD</option>
       <option value="EUR">EUR</option>
     </select>
 
     <button onclick="convert()">Convert</button>
-    <p id="result"></p>
+
+    <!-- RESULT BOX (this is what was missing) -->
+    <div id="result"></div>
   </section>
 </main>
 
 </body>
 
 </html>
+
 
