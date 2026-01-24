@@ -80,6 +80,7 @@
   </section>
 </main>
 <script>
+<script>
 async function convert() {
   const amount = document.getElementById("amount").value;
   const from = document.getElementById("from").value;
@@ -100,25 +101,30 @@ async function convert() {
 
   try {
     const response = await fetch(
-      `https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`
+      `https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`
     );
+
     const data = await response.json();
 
-    if (!data.result) {
-      resultBox.textContent = "Conversion failed. Try again.";
+    if (!data.rates || !data.rates[to]) {
+      resultBox.textContent = "Conversion failed.";
       return;
     }
 
-    resultBox.textContent = `${amount} ${from} = ${data.result.toFixed(2)} ${to}`;
+    resultBox.textContent =
+      `${amount} ${from} = ${data.rates[to].toFixed(2)} ${to}`;
   } catch (error) {
     resultBox.textContent = "Network error. Please try again.";
   }
-}
+
+</script>
+
 </script>
 
 </body>
 
 </html>
+
 
 
 
