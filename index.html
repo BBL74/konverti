@@ -50,23 +50,39 @@
 
     <input type="number" id="amount" placeholder="Enter amount">
 
-    <select id="from">
-      <option value="USD">USD</option>
-      <option value="GBP">GBP</option>
-      <option value="EUR">EUR</option>
+      <select id="from"></select>
+<select id="to"></select>
+     
     </select>
+<script>
+async function loadCurrencies() {
+  const response = await fetch("https://api.frankfurter.app/currencies");
+  const currencies = await response.json();
 
-    <select id="to">
-      <option value="GBP">GBP</option>
-      <option value="USD">USD</option>
-      <option value="EUR">EUR</option>
-    </select>
+  const fromSelect = document.getElementById("from");
+  const toSelect = document.getElementById("to");
+
+  for (const code in currencies) {
+    const option1 = document.createElement("option");
+    option1.value = code;
+    option1.textContent = `${code} — ${currencies[code]}`;
+
+    const option2 = option1.cloneNode(true);
+
+    fromSelect.appendChild(option1);
+    toSelect.appendChild(option2);
+  }
+
+  fromSelect.value = "USD";
+  toSelect.value = "GBP";
+}
 
     <button onclick="convert()">Convert</button>
 
     <div id="result" style="margin-top:15px;font-weight:bold;"></div>
   </section>
 </main>
+loadCurrencies();
 
 <script>
 async function convert() {
@@ -111,6 +127,7 @@ async function convert() {
 
 </body>
 </html>
+
 
 
 
