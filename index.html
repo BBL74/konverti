@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <title>Konverti.net</title>
 
-  <link rel="stylesheet" href="style.css">
-
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -33,6 +31,20 @@
       border-radius: 10px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
+
+    select, input, button {
+      margin: 8px;
+      padding: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #f36c21;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -50,10 +62,19 @@
 
     <input type="number" id="amount" placeholder="Enter amount">
 
-      <select id="from"></select>
-<select id="to"></select>
-     
-    </select>
+    <br>
+
+    <select id="from"></select>
+    <select id="to"></select>
+
+    <br>
+
+    <button onclick="convert()">Convert</button>
+
+    <div id="result" style="margin-top:15px;font-weight:bold;"></div>
+  </section>
+</main>
+
 <script>
 async function loadCurrencies() {
   const response = await fetch("https://api.frankfurter.app/currencies");
@@ -77,14 +98,6 @@ async function loadCurrencies() {
   toSelect.value = "GBP";
 }
 
-    <button onclick="convert()">Convert</button>
-
-    <div id="result" style="margin-top:15px;font-weight:bold;"></div>
-  </section>
-</main>
-loadCurrencies();
-
-<script>
 async function convert() {
   const amount = document.getElementById("amount").value;
   const from = document.getElementById("from").value;
@@ -96,37 +109,27 @@ async function convert() {
     return;
   }
 
-  if (from === to) {
-    resultBox.textContent = `${amount} ${from} = ${amount} ${to}`;
-    return;
-  }
-
   resultBox.textContent = "Converting…";
 
   try {
     const response = await fetch(
       `https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`
     );
-
     const data = await response.json();
-
-    if (!data.rates || !data.rates[to]) {
-      resultBox.textContent = "Conversion failed.";
-      return;
-    }
 
     resultBox.textContent =
       `${amount} ${from} = ${data.rates[to].toFixed(2)} ${to}`;
   } catch (err) {
-    resultBox.textContent = "Network error. Please try again.";
+    resultBox.textContent = "Conversion failed. Please try again.";
   }
-  
 }
 
+loadCurrencies();
 </script>
 
 </body>
 </html>
+
 
 
 
