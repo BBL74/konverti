@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Konverti.net</title>
-<link rel="stylesheet" href="style.css">
-</head>
+
+  <link rel="stylesheet" href="style.css">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,12 +25,7 @@
       margin-bottom: 10px;
     }
 
-    .tagline {
-      font-size: 1.1rem;
-      color: #444;
-    }
-
-    .section {
+    .converter {
       background: white;
       margin: 30px auto;
       padding: 20px;
@@ -37,18 +33,13 @@
       border-radius: 10px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
-
-    iframe {
-      width: 100%;
-      height: 420px;
-      border: none;
-    }
   </style>
 </head>
 
- <body>
+<body>
+
 <header>
-  <img src="logo.png" alt="Konverti-logo" class="logo">
+  <img src="logo.png" alt="Konverti logo" class="logo">
   <h1>Konverti</h1>
   <p>Fast, simple currency and unit conversions.</p>
 </header>
@@ -73,12 +64,10 @@
 
     <button onclick="convert()">Convert</button>
 
-    <div id="result"></div>
- <div id="result" style="margin-top:15px;font-weight:bold;"></div>
-</div>
+    <div id="result" style="margin-top:15px;font-weight:bold;"></div>
   </section>
 </main>
-<script>
+
 <script>
 async function convert() {
   const amount = document.getElementById("amount").value;
@@ -91,77 +80,31 @@ async function convert() {
     return;
   }
 
-  if (from === to) {
-    resultBox.textContent = `${amount} ${from} = ${amount} ${to}`;
-    return;
-  }
-
   resultBox.textContent = "Converting…";
-
-  try {
-    const response = await fetch(
-      `https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`
-    );
-
-    const data = await response.json();
-
-    if (!data.rates || !data.rates[to]) {
-      resultBox.textContent = "Conversion failed.";
-      return;
-    }
-
-    resultBox.textContent =
-      `${amount} ${from} = ${data.rates[to].toFixed(2)} ${to}`;
-  } catch (error) {
-    resultBox.textContent = "Network error. Please try again.";
-  }
-
-<script>
-async function convert() {
-  const amount = document.getElementById("amount").value;
-  const from = document.getElementById("from").value;
-  const to = document.getElementById("to").value;
-
-  const response = await fetch(
-    `https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`
-  );
-
-  const data = await response.json();
-
-  document.getElementById("result").textContent =
-    `${amount} ${from} = ${data.result.toFixed(2)} ${to}`;
-}
-<script>
-async function convert() {
-  const amount = document.getElementById("amount").value;
-  const from = document.getElementById("from").value;
-  const to = document.getElementById("to").value;
-  const resultBox = document.getElementById("result");
-
-  if (!amount || amount <= 0) {
-    resultBox.innerText = "Please enter a valid amount.";
-    return;
-  }
 
   try {
     const response = await fetch(
       `https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`
     );
+
     const data = await response.json();
 
     if (!data.result) {
-      throw new Error("No result returned");
+      throw new Error();
     }
 
-    resultBox.innerText = `${amount} ${from} = ${data.result.toFixed(2)} ${to}`;
-  } catch (error) {
-    resultBox.innerText = "Conversion failed. Please try again.";
+    resultBox.textContent =
+      `${amount} ${from} = ${data.result.toFixed(2)} ${to}`;
+  } catch {
+    resultBox.textContent = "Conversion failed. Please try again.";
   }
 }
 </script>
 
- </body>
+</body>
 </html>
+
+
 
 
 
