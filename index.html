@@ -7,7 +7,186 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f6f8
+      background: #f6f8fb;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #0a1f44;
+    }
+
+    header {
+      padding: 40px 20px 20px;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    .tagline {
+      color: #555;
+    }
+
+    .box {
+      background: white;
+      margin: 30px auto;
+      padding: 20px;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    input, select, button {
+      padding: 10px;
+      margin: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      background: #f7931a;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Konverti</h1>
+  <p class="tagline">Fast, simple currency and unit conversions</p>
+</header>
+
+<!-- CURRENCY CONVERTER -->
+<section class="box">
+  <h2>Currency Converter</h2>
+
+  <input type="number" id="amount" placeholder="Amount">
+
+  <br>
+
+  <select id="from"></select>
+  <select id="to"></select>
+
+  <br>
+
+  <button onclick="convertCurrency()">Convert</button>
+
+  <div id="currencyResult" class="result"></div>
+</section>
+
+<!-- UNIT CONVERTER -->
+<section class="box">
+  <h2>Unit Converter (Weight)</h2>
+
+  <input type="number" id="unitValue" placeholder="Value">
+
+  <select id="unitFrom">
+    <option value="kg">Kilograms</option>
+    <option value="lb">Pounds</option>
+  </select>
+
+  <select id="unitTo">
+    <option value="lb">Pounds</option>
+    <option value="kg">Kilograms</option>
+  </select>
+
+  <br>
+
+  <button onclick="convertUnit()">Convert</button>
+
+  <div id="unitResult" class="result"></div>
+</section>
+
+<script>
+/* ---------- LOAD CURRENCIES ---------- */
+async function loadCurrencies() {
+  const response = await fetch("https://api.frankfurter.app/currencies");
+  const currencies = await response.json();
+
+  const from = document.getElementById("from");
+  const to = document.getElementById("to");
+
+  for (const code in currencies) {
+    const opt1 = document.createElement("option");
+    opt1.value = code;
+    opt1.textContent = `${code} — ${currencies[code]}`;
+
+    const opt2 = opt1.cloneNode(true);
+
+    from.appendChild(opt1);
+    to.appendChild(opt2);
+  }
+
+  from.value = "USD";
+  to.value = "GHS";
+}
+
+loadCurrencies();
+
+/* ---------- CURRENCY CONVERSION ---------- */
+async function convertCurrency() {
+  const amount = document.getElementById("amount").value;
+  const from = document.getElementById("from").value;
+  const to = document.getElementById("to").value;
+  const result = document.getElementById("currencyResult");
+
+  if (!amount || amount <= 0) {
+    result.textContent = "Please enter a valid amount.";
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`
+    );
+    const data = await response.json();
+
+    result.textContent =
+      `${amount} ${from} = ${data.rates[to].toFixed(2)} ${to}`;
+  } catch {
+    result.textContent = "Conversion failed. Please try again.";
+  }
+}
+
+/* ---------- UNIT CONVERSION ---------- */
+function convertUnit() {
+  const value = document.getElementById("unitValue").value;
+  const from = document.getElementById("unitFrom").value;
+  const to = document.getElementById("unitTo").value;
+  const result = document.getElementById("unitResult");
+
+  if (!value || value <= 0) {
+    result.textContent = "Please enter a valid value.";
+    return;
+  }
+
+  let converted;
+
+  if (from === "kg" && to === "lb") {
+    converted = value * 2.20462;
+  } else if (from === "lb" && to === "kg") {
+    converted = value / 2.20462;
+  } else {
+    converted = value;
+  }
+
+  result.textContent = `${value} ${from} = ${converted.toFixed(2)} ${to}`;
+}
+</script>
+
+</body>
+</html>
 
 
 
