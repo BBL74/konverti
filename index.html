@@ -1,162 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Konverti.net</title>
+<meta charset="UTF-8">
+<title>Konverti.net</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f6f8fb;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      color: #0a1f44;
-    }
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background:#f1f3fb;
+  margin:0;
+  text-align:center;
+  color:#0a1f44;
+}
 
-    header {
-      padding: 40px 20px 20px;
-    }
+header {
+  padding:40px 20px;
+}
 
-    .logo {
-      max-width: 220px;
-      margin-bottom: 10px;
-    }
+.logo {
+  max-width:200px;
+}
 
-    h1 {
-      margin-bottom: 5px;
-    }
+.converter {
+  background:#fff;
+  max-width:650px;
+  margin:30px auto;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
 
-    .section {
-      background: white;
-      margin: 30px auto;
-      padding: 20px;
-      max-width: 650px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    }
+h2 {
+  color:#1f3cff;
+}
 
-    input, select, button {
-      padding: 10px;
-      margin: 8px;
-      font-size: 1rem;
-    }
+select, input {
+  padding:10px;
+  margin:8px;
+  font-size:16px;
+}
 
-    button {
-      background: #1e66f5;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+button {
+  padding:12px 18px;
+  background:#ff7a00;
+  border:none;
+  color:white;
+  font-size:16px;
+  border-radius:6px;
+  cursor:pointer;
+}
 
-    button:hover {
-      background: #174fc4;
-    }
-
-    .result {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-  </style>
+.result {
+  margin-top:15px;
+  font-weight:bold;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <img src="logo.png" alt="Konverti logo" class="logo">
+  <img src="logo.png" class="logo" alt="Konverti logo">
   <h1>Konverti</h1>
-  <p>Fast, simple currency and unit conversions.</p>
+  <p>Fast currency, unit & weight conversions</p>
 </header>
 
-<!-- ================= CURRENCY CONVERTER ================= -->
+<!-- CURRENCY -->
+<section class="converter">
+<h2>Currency Converter</h2>
 
-<section class="section">
-  <h2>Currency Converter</h2>
+<input type="number" id="amount" placeholder="Amount">
 
-  <input type="number" id="amount" placeholder="Enter amount">
+<select id="fromCurrency"></select>
+<select id="toCurrency"></select>
 
-  <br>
+<br><br>
+<button onclick="convertCurrency()">Convert</button>
 
-  <select id="fromCurrency"></select>
-  <select id="toCurrency"></select>
-
-  <br>
-
-  <button onclick="convertCurrency()">Convert</button>
-
-  <div id="currencyResult" class="result"></div>
+<div class="result" id="currencyResult"></div>
 </section>
 
-<!-- ================= UNIT / WEIGHT CONVERTER ================= -->
+<!-- UNIT -->
+<section class="converter">
+<h2>Unit & Weight Converter</h2>
 
-<section class="section">
-  <h2>Unit & Weight Converter</h2>
+<input type="number" id="unitValue" placeholder="Value">
 
-  <input type="number" id="unitAmount" placeholder="Enter value">
+<select id="unitFrom">
+  <option value="kg">Kilograms</option>
+  <option value="lb">Pounds</option>
+  <option value="g">Grams</option>
+  <option value="oz">Ounces</option>
+  <option value="cm">Centimeters</option>
+  <option value="m">Meters</option>
+  <option value="in">Inches</option>
+</select>
 
-  <br>
+<select id="unitTo">
+  <option value="lb">Pounds</option>
+  <option value="kg">Kilograms</option>
+  <option value="g">Grams</option>
+  <option value="oz">Ounces</option>
+  <option value="cm">Centimeters</option>
+  <option value="m">Meters</option>
+  <option value="in">Inches</option>
+</select>
 
-  <select id="fromUnit">
-    <option value="kg">Kilograms</option>
-    <option value="lb">Pounds</option>
-    <option value="g">Grams</option>
-    <option value="oz">Ounces</option>
-    <option value="cm">Centimeters</option>
-    <option value="m">Meters</option>
-    <option value="in">Inches</option>
-    <option value="ft">Feet</option>
-  </select>
+<br><br>
+<button onclick="convertUnit()">Convert</button>
 
-  <select id="toUnit">
-    <option value="lb">Pounds</option>
-    <option value="kg">Kilograms</option>
-    <option value="oz">Ounces</option>
-    <option value="g">Grams</option>
-    <option value="m">Meters</option>
-    <option value="cm">Centimeters</option>
-    <option value="ft">Feet</option>
-    <option value="in">Inches</option>
-  </select>
-
-  <br>
-
-  <button onclick="convertUnits()">Convert</button>
-
-  <div id="unitResult" class="result"></div>
+<div class="result" id="unitResult"></div>
 </section>
 
 <script>
-/* ================= LOAD CURRENCIES ================= */
+// 🔴 INSERT YOUR API KEY HERE
+const APP_ID = "3524322069f846d5b31955ff784dab9a";
 
+// Load currencies
 async function loadCurrencies() {
-  const response = await fetch("https://api.exchangerate.host/symbols");
-  const data = await response.json();
+  const res = await fetch(`https://openexchangerates.org/api/currencies.json`);
+  const data = await res.json();
 
   const from = document.getElementById("fromCurrency");
   const to = document.getElementById("toCurrency");
 
-  for (const code in data.symbols) {
-    const name = data.symbols[code].description;
-
+  for (const code in data) {
     const opt1 = document.createElement("option");
     opt1.value = code;
-    opt1.textContent = `${code} — ${name}`;
+    opt1.text = `${code} — ${data[code]}`;
 
     const opt2 = opt1.cloneNode(true);
 
-    from.appendChild(opt1);
-    to.appendChild(opt2);
+    from.add(opt1);
+    to.add(opt2);
   }
 
   from.value = "USD";
   to.value = "GHS";
 }
 
-loadCurrencies();
-
-/* ================= CURRENCY CONVERSION ================= */
-
+// Currency conversion
 async function convertCurrency() {
   const amount = document.getElementById("amount").value;
   const from = document.getElementById("fromCurrency").value;
@@ -164,54 +147,44 @@ async function convertCurrency() {
   const result = document.getElementById("currencyResult");
 
   if (!amount || amount <= 0) {
-    result.textContent = "Please enter a valid amount.";
+    result.textContent = "Enter a valid amount";
     return;
   }
-
-  result.textContent = "Converting…";
 
   try {
-    const response = await fetch(
-      `https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`
+    const res = await fetch(
+      `https://openexchangerates.org/api/latest.json?app_id=${APP_ID}`
     );
-    const data = await response.json();
+    const data = await res.json();
 
-    result.textContent =
-      `${amount} ${from} = ${data.result.toFixed(2)} ${to}`;
+    const rate = data.rates[to] / data.rates[from];
+    result.textContent = `${amount} ${from} = ${(amount * rate).toFixed(2)} ${to}`;
   } catch {
-    result.textContent = "Conversion failed. Please try again.";
+    result.textContent = "Conversion failed";
   }
 }
 
-/* ================= UNIT CONVERSION ================= */
-
-function convertUnits() {
-  const value = parseFloat(document.getElementById("unitAmount").value);
-  const from = document.getElementById("fromUnit").value;
-  const to = document.getElementById("toUnit").value;
-  const result = document.getElementById("unitResult");
-
-  if (isNaN(value)) {
-    result.textContent = "Please enter a valid number.";
-    return;
-  }
+// Unit conversion
+function convertUnit() {
+  const v = parseFloat(document.getElementById("unitValue").value);
+  const f = document.getElementById("unitFrom").value;
+  const t = document.getElementById("unitTo").value;
 
   const factors = {
-    kg: 1,
-    g: 0.001,
-    lb: 0.453592,
-    oz: 0.0283495,
-    m: 1,
-    cm: 0.01,
-    in: 0.0254,
-    ft: 0.3048
+    kg:1, lb:0.453592, g:0.001, oz:0.0283495,
+    m:1, cm:0.01, in:0.0254
   };
 
-  const base = value * factors[from];
-  const converted = base / factors[to];
+  if (!v) return;
 
-  result.textContent = `${value} ${from} = ${converted.toFixed(4)} ${to}`;
+  const metersOrKg = v * factors[f];
+  const result = metersOrKg / factors[t];
+
+  document.getElementById("unitResult").textContent =
+    `${v} ${f} = ${result.toFixed(2)} ${t}`;
 }
+
+loadCurrencies();
 </script>
 
 </body>
