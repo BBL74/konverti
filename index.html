@@ -1,62 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Konverti.net</title>
+  <meta charset="UTF-8">
+  <title>Konverti.net</title>
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f6f8fb;
-  margin: 0;
-  text-align: center;
-  color: #0a1f44;
-}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f6f8fb;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #0a1f44;
+    }
 
-header {
-  padding: 40px 20px 10px;
-}
+    header {
+      padding: 40px 20px 20px;
+    }
 
-.logo {
-  max-width: 200px;
-}
+    .logo {
+      max-width: 220px;
+      margin-bottom: 10px;
+    }
 
-.converter {
-  background: #ffffff;
-  margin: 25px auto;
-  padding: 25px;
-  max-width: 650px;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
+    h1 {
+      margin-bottom: 5px;
+    }
 
-h2 {
-  color: #1f4bd8;
-}
+    .section {
+      background: white;
+      margin: 30px auto;
+      padding: 20px;
+      max-width: 650px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
 
-input, select, button {
-  padding: 10px;
-  margin: 8px;
-  font-size: 16px;
-}
+    input, select, button {
+      padding: 10px;
+      margin: 8px;
+      font-size: 1rem;
+    }
 
-button {
-  background: #ff8c42;
-  border: none;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
-}
+    button {
+      background: #1e66f5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-button:hover {
-  opacity: 0.9;
-}
+    button:hover {
+      background: #174fc4;
+    }
 
-.result {
-  margin-top: 15px;
-  font-weight: bold;
-}
-</style>
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
@@ -64,89 +66,96 @@ button:hover {
 <header>
   <img src="logo.png" alt="Konverti logo" class="logo">
   <h1>Konverti</h1>
-  <p>Fast, simple currency and unit conversions</p>
+  <p>Fast, simple currency and unit conversions.</p>
 </header>
 
-<!-- CURRENCY CONVERTER -->
-<section class="converter">
-<h2>Currency Converter</h2>
+<!-- ================= CURRENCY CONVERTER ================= -->
 
-<input type="number" id="amount" placeholder="Amount">
+<section class="section">
+  <h2>Currency Converter</h2>
 
-<select id="fromCurrency"></select>
-<select id="toCurrency"></select>
+  <input type="number" id="amount" placeholder="Enter amount">
 
-<br>
-<button onclick="convertCurrency()">Convert</button>
+  <br>
 
-<div class="result" id="currencyResult"></div>
+  <select id="fromCurrency"></select>
+  <select id="toCurrency"></select>
+
+  <br>
+
+  <button onclick="convertCurrency()">Convert</button>
+
+  <div id="currencyResult" class="result"></div>
 </section>
 
-<!-- UNIT CONVERTER -->
-<section class="converter">
-<h2>Unit & Weight Converter</h2>
+<!-- ================= UNIT / WEIGHT CONVERTER ================= -->
 
-<input type="number" id="unitValue" placeholder="Value">
+<section class="section">
+  <h2>Unit & Weight Converter</h2>
 
-<select id="fromUnit">
-  <option value="kg">Kilograms</option>
-  <option value="lb">Pounds</option>
-  <option value="g">Grams</option>
-  <option value="oz">Ounces</option>
-  <option value="cm">Centimeters</option>
-  <option value="m">Meters</option>
-  <option value="in">Inches</option>
-  <option value="ft">Feet</option>
-</select>
+  <input type="number" id="unitAmount" placeholder="Enter value">
 
-<select id="toUnit">
-  <option value="lb">Pounds</option>
-  <option value="kg">Kilograms</option>
-  <option value="oz">Ounces</option>
-  <option value="g">Grams</option>
-  <option value="in">Inches</option>
-  <option value="cm">Centimeters</option>
-  <option value="ft">Feet</option>
-  <option value="m">Meters</option>
-</select>
+  <br>
 
-<br>
-<button onclick="swapUnits()">Swap</button>
-<button onclick="convertUnits()">Convert</button>
+  <select id="fromUnit">
+    <option value="kg">Kilograms</option>
+    <option value="lb">Pounds</option>
+    <option value="g">Grams</option>
+    <option value="oz">Ounces</option>
+    <option value="cm">Centimeters</option>
+    <option value="m">Meters</option>
+    <option value="in">Inches</option>
+    <option value="ft">Feet</option>
+  </select>
 
-<div class="result" id="unitResult"></div>
+  <select id="toUnit">
+    <option value="lb">Pounds</option>
+    <option value="kg">Kilograms</option>
+    <option value="oz">Ounces</option>
+    <option value="g">Grams</option>
+    <option value="m">Meters</option>
+    <option value="cm">Centimeters</option>
+    <option value="ft">Feet</option>
+    <option value="in">Inches</option>
+  </select>
+
+  <br>
+
+  <button onclick="convertUnits()">Convert</button>
+
+  <div id="unitResult" class="result"></div>
 </section>
 
 <script>
-/* ---------- CURRENCIES ---------- */
-const currencyNames = {
-  USD: "US Dollar",
-  EUR: "Euro",
-  GBP: "British Pound",
-  GHS: "Ghana Cedi",
-  NGN: "Nigerian Naira",
-  ZAR: "South African Rand",
-  KES: "Kenyan Shilling",
-  CAD: "Canadian Dollar",
-  AUD: "Australian Dollar",
-  JPY: "Japanese Yen",
-  CHF: "Swiss Franc"
-};
+/* ================= LOAD CURRENCIES ================= */
 
-function loadCurrencies() {
+async function loadCurrencies() {
+  const response = await fetch("https://api.exchangerate.host/symbols");
+  const data = await response.json();
+
   const from = document.getElementById("fromCurrency");
   const to = document.getElementById("toCurrency");
 
-  for (const code in currencyNames) {
-    const opt1 = new Option(`${code} — ${currencyNames[code]}`, code);
-    const opt2 = new Option(`${code} — ${currencyNames[code]}`, code);
-    from.add(opt1);
-    to.add(opt2);
+  for (const code in data.symbols) {
+    const name = data.symbols[code].description;
+
+    const opt1 = document.createElement("option");
+    opt1.value = code;
+    opt1.textContent = `${code} — ${name}`;
+
+    const opt2 = opt1.cloneNode(true);
+
+    from.appendChild(opt1);
+    to.appendChild(opt2);
   }
 
   from.value = "USD";
   to.value = "GHS";
 }
+
+loadCurrencies();
+
+/* ================= CURRENCY CONVERSION ================= */
 
 async function convertCurrency() {
   const amount = document.getElementById("amount").value;
@@ -155,59 +164,54 @@ async function convertCurrency() {
   const result = document.getElementById("currencyResult");
 
   if (!amount || amount <= 0) {
-    result.textContent = "Enter a valid amount.";
+    result.textContent = "Please enter a valid amount.";
     return;
   }
 
+  result.textContent = "Converting…";
+
   try {
-    const res = await fetch(
-      `https://api.frankfurter.app/latest?amount=${amount}&from=${from}&to=${to}`
+    const response = await fetch(
+      `https://api.exchangerate.host/convert?from=${from}&to=${to}&amount=${amount}`
     );
-    const data = await res.json();
+    const data = await response.json();
 
     result.textContent =
-      `${amount} ${from} = ${data.rates[to].toFixed(2)} ${to}`;
+      `${amount} ${from} = ${data.result.toFixed(2)} ${to}`;
   } catch {
-    result.textContent = "Conversion failed. Try again.";
+    result.textContent = "Conversion failed. Please try again.";
   }
 }
 
-/* ---------- UNITS ---------- */
-const unitFactors = {
-  kg: 1,
-  g: 0.001,
-  lb: 0.453592,
-  oz: 0.0283495,
-  m: 1,
-  cm: 0.01,
-  in: 0.0254,
-  ft: 0.3048
-};
+/* ================= UNIT CONVERSION ================= */
 
 function convertUnits() {
-  const value = document.getElementById("unitValue").value;
+  const value = parseFloat(document.getElementById("unitAmount").value);
   const from = document.getElementById("fromUnit").value;
   const to = document.getElementById("toUnit").value;
   const result = document.getElementById("unitResult");
 
-  if (!value || value <= 0) {
-    result.textContent = "Enter a valid value.";
+  if (isNaN(value)) {
+    result.textContent = "Please enter a valid number.";
     return;
   }
 
-  const base = value * unitFactors[from];
-  const converted = base / unitFactors[to];
+  const factors = {
+    kg: 1,
+    g: 0.001,
+    lb: 0.453592,
+    oz: 0.0283495,
+    m: 1,
+    cm: 0.01,
+    in: 0.0254,
+    ft: 0.3048
+  };
 
-  result.textContent = `${value} ${from} = ${converted.toFixed(3)} ${to}`;
+  const base = value * factors[from];
+  const converted = base / factors[to];
+
+  result.textContent = `${value} ${from} = ${converted.toFixed(4)} ${to}`;
 }
-
-function swapUnits() {
-  const from = document.getElementById("fromUnit");
-  const to = document.getElementById("toUnit");
-  [from.value, to.value] = [to.value, from.value];
-}
-
-loadCurrencies();
 </script>
 
 </body>
